@@ -6,8 +6,9 @@ namespace determinant
         public static Random Rnd { get; set; } = new Random();
         public static void Main(string[] args)
         {
-            //double[,] matrixD = new double[,]{{5, 2, -1, 6}, {3, 4, -1, 5},{0, 0, 0, 1},{-1, 2, -2, 0}};
-            double[,] matrixD = InitMatrixD();
+            //double[,] matrixD = new double[,] { { 5, 2, -1, 6 }, { 3, 4, -1, 5 }, { 0, 0, 0, 1 }, { -1, 2, -2, 0 } };
+            double[,] matrixD = new double[,] { { 5, 2, -1 }, { 3, 4, -1 }, { 2, 2, 2 } };
+            //double[,] matrixD = InitMatrixD();
             PrintMatrixD(matrixD);
 
             double[,] matrixDupd = GaussMatrix(matrixD);
@@ -100,9 +101,9 @@ namespace determinant
             {
                 for (int k = 1; k < size; k++)
                 {
-                    smallMatrix[a, b++] = matrix[j, k];
+                    smallMatrix[a, b] = matrix[j, k];
+                    b++;
                 }
-
                 a++;
                 b = 0;
             }
@@ -121,6 +122,7 @@ namespace determinant
             double mult;//множитель
             if (matrix[0, 0] == 0)
                 matrix = SwapLines(matrix, 0);
+
             for (int i = 1; i < matrix.GetLength(1); i++)//перебор строк 
             {
                 if (matrix[i, 0] != 0)
@@ -139,6 +141,7 @@ namespace determinant
                 }
                 
             }
+
             double[,] newMatrix = GaussMatrix(SmallerMatrixGauss(matrix));
 
             for (int i = 0; i < newMatrix.GetLength(0); i++)
@@ -148,28 +151,29 @@ namespace determinant
                     matrix[i + 1, j + 1] = newMatrix[i, j];
                 }
             }
+
             return matrix;
         }
+
         static double[,] SwapLines(double[,] matrix, int a)
         {
-            // a to notnull
             int notNull=-1;
             double temp=0;
 
-            if (matrix.GetLength(0) < 2)//нечего свопать
+            if (matrix.GetLength(0) < 2)
                 return matrix;
             
-            for (int i = 1; i < matrix.GetLength(0); i++)//поиск ненулевого элемента в столбце
+            for (int i = 1; i < matrix.GetLength(0); i++) // поиск ненулевого элемента в столбце
                 if (matrix[i, 0] != 0)
                 {
                     notNull = i;
                     break;
                 }
 
-            if (notNull == -1)//ненулевых элементов нет
-                return new double[,]{{0}};//зациклим?) ага)
+            if (notNull == -1) // ненулевых элементов нет
+                return new double[,]{{0}};
 
-            for (int i = 0; i < matrix.GetLength(0); i++)//своп линий
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
                 temp = matrix[a, i];
                 matrix[a, i] = matrix[notNull, i];
@@ -179,6 +183,7 @@ namespace determinant
             sign *= -1;//изменяем знак детерминанта при обмене строк
             return matrix;
         }
+
         public static double CountDeterminant(double[,] matrix)
         {
             //перемножение элементов главной диагонали
